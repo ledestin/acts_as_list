@@ -163,7 +163,7 @@ end
 class DBConfigTest < Minitest::Test
   def test_db_config
     # make sure sqlite3 accepts multi threaded access
-    assert_equal "file:memdb1?mode=memory&cache=shared", ActiveRecord::Base.connection.pool.spec.config[:database]
+    assert_equal ":memory:", ActiveRecord::Base.connection.pool.spec.config[:database]
   end
 end
 
