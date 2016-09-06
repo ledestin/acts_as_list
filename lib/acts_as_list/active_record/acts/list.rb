@@ -155,10 +155,10 @@ module ActiveRecord
           include ::ActiveRecord::Acts::List::InstanceMethods
         end
 
-        def idfy(symbol)
-          return symbol if symbol.to_s =~ /_id$/
+        def idfy(name)
+          return name if name.to_s =~ /_id$/
 
-          foreign_key(symbol).to_sym
+          foreign_key(name).to_sym
         end
       end
 
