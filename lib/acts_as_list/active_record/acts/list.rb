@@ -1,5 +1,6 @@
 require_relative "column_definer"
 require_relative "scope_definer"
+require_relative "top_definer"
 require_relative "update_position_definer"
 
 module ActiveRecord
@@ -43,15 +44,8 @@ module ActiveRecord
 
           ScopeDefiner.call(caller_class, scope)
           ColumnDefiner.call(caller_class, column)
+          TopDefiner.call(caller_class, top_of_list)
           UpdatePositionDefiner.call(caller_class)
-
-          define_singleton_method :acts_as_list_top do
-            top_of_list.to_i
-          end
-
-          define_method :acts_as_list_top do
-            top_of_list.to_i
-          end
 
           define_method :acts_as_list_class do
             caller_class
