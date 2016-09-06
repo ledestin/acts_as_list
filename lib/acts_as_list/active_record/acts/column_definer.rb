@@ -3,6 +3,8 @@ module ActiveRecord
     module ColumnDefiner #:nodoc:
       def self.call(caller_class, column)
         caller_class.class_eval do
+          attr_reader :position_changed
+
           define_method :position_column do
             column
           end

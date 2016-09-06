@@ -61,8 +61,6 @@ module ActiveRecord
             add_new_at
           end
 
-          attr_reader :position_changed
-
           before_validation :check_top_position
 
           before_destroy :lock!
