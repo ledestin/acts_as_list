@@ -60,8 +60,6 @@ module ActiveRecord
               add_new_at
             end
 
-            self.scope :in_list, lambda { where("#{quoted_position_column_with_table_name} IS NOT NULL") }
-
             define_singleton_method :decrement_all do
               update_all_with_touch "#{quoted_position_column} = (#{quoted_position_column_with_table_name} - 1)"
             end

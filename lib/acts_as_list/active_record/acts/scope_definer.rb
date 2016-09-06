@@ -17,6 +17,8 @@ module ActiveRecord
         scope = idfy(scope) if scope.is_a?(Symbol)
 
         @caller_class.class_eval do
+          self.scope :in_list, lambda { where("#{quoted_position_column_with_table_name} IS NOT NULL") }
+
           define_method :scope_name do
             scope
           end
