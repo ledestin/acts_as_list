@@ -42,8 +42,8 @@ module ActiveRecord
         def acts_as_list(column: "position", scope: "1 = 1", top_of_list: 1, add_new_at: :bottom)
           caller_class = self
 
-          ScopeDefiner.call(caller_class, scope)
           ColumnDefiner.call(caller_class, column)
+          ScopeDefiner.call(caller_class, scope)
           TopDefiner.call(caller_class, top_of_list)
           UpdatePositionDefiner.call(caller_class)
 
