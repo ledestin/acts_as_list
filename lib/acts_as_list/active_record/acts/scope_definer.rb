@@ -1,11 +1,11 @@
 module ActiveRecord
   module Acts #:nodoc:
     class ScopeDefiner #:nodoc:
+      include ActiveSupport::Inflector
+
       def self.call(caller_class, scope)
         new(caller_class, scope).call
       end
-
-      include ActiveSupport::Inflector
 
       def initialize(caller_class, scope)
         @caller_class, @scope = caller_class, scope
