@@ -23,7 +23,13 @@ module ActiveRecord
       #   todo_list.first.move_to_bottom
       #   todo_list.last.move_higher
       module ClassMethods
-        include ActiveSupport::Inflector
+        extend ActiveSupport::Inflector
+
+        def self.idfy(symbol)
+          return symbol if symbol.to_s =~ /_id$/
+
+          foreign_key(symbol).to_sym
+        end
 
         # Configuration options are:
         #
@@ -37,9 +43,7 @@ module ActiveRecord
         # * +add_new_at+ - specifies whether objects get added to the :top or :bottom of the list. (default: +bottom+)
         #                   `nil` will result in new items not being added to the list on create
         def acts_as_list(column: "position", scope: "1 = 1", top_of_list: 1, add_new_at: :bottom)
-          if scope.is_a?(Symbol) && scope.to_s !~ /_id$/
-            scope = foreign_key(scope).to_sym
-          end
+          scope = ClassMethods.idfy(scope) if scope.is_a?(Symbol)
 
           caller_class = self
 
