@@ -14,7 +14,7 @@ module ActiveRecord
       def call
         scope = @scope
 
-        scope = idfy(scope) if scope.is_a?(Symbol)
+        scope = idify(scope) if scope.is_a?(Symbol)
 
         @caller_class.class_eval do
           self.scope :in_list, lambda { where("#{quoted_position_column_with_table_name} IS NOT NULL") }
@@ -53,7 +53,7 @@ module ActiveRecord
         end
       end
 
-      def idfy(name)
+      def idify(name)
         return name if name.to_s =~ /_id$/
 
         foreign_key(name).to_sym
