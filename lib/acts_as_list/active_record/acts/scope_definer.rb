@@ -1,22 +1,12 @@
 module ActiveRecord
   module Acts #:nodoc:
-    class ScopeDefiner #:nodoc:
-      include ActiveSupport::Inflector
+    module ScopeDefiner #:nodoc:
+      extend ActiveSupport::Inflector
 
       def self.call(caller_class, scope)
-        new(caller_class, scope).call
-      end
-
-      def initialize(caller_class, scope)
-        @caller_class, @scope = caller_class, scope
-      end
-
-      def call
-        scope = @scope
-
         scope = idify(scope) if scope.is_a?(Symbol)
 
-        @caller_class.class_eval do
+        caller_class.class_eval do
           self.scope :in_list, lambda { where("#{quoted_position_column_with_table_name} IS NOT NULL") }
 
           define_method :scope_name do
@@ -53,7 +43,7 @@ module ActiveRecord
         end
       end
 
-      def idify(name)
+      def self.idify(name)
         return name if name.to_s =~ /_id$/
 
         foreign_key(name).to_sym
