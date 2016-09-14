@@ -14,7 +14,7 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
         @position_changed = true
       end
 
-      SELF.enable_mass_assignment(position_changed) if SELF.user_uses_mass_assignment?
+      SELF.enable_mass_assignment(position_column) if SELF.user_uses_mass_assignment?
 
       define_singleton_method :quoted_position_column do
         @_quoted_position_column ||= connection.quote_column_name(position_column)
