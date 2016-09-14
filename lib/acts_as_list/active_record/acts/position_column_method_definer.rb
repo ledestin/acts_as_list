@@ -1,7 +1,7 @@
 module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
-  def self.call(caller_class, position_column)
-    this_module = self
+  SELF = self
 
+  def self.call(caller_class, position_column)
     caller_class.class_eval do
       attr_reader :position_changed
 
@@ -14,7 +14,7 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
         @position_changed = true
       end
 
-      if this_module.user_uses_rails_3_mass_assignment?
+      if SELF.user_uses_rails_3_mass_assignment?
         attr_accessible :"#{position_column}"
       end
 
