@@ -1,5 +1,7 @@
 module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
   def self.call(caller_class, position_column)
+    this_module = self
+
     caller_class.class_eval do
       attr_reader :position_changed
 
@@ -12,9 +14,7 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
         @position_changed = true
       end
 
-      # only add to attr_accessible
-      # if the class has some mass_assignment_protection
-      if defined?(accessible_attributes) and !accessible_attributes.blank?
+      if this_module.user_uses_rails_3_mass_assignment?
         attr_accessible :"#{position_column}"
       end
 
@@ -26,5 +26,9 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
         @_quoted_position_column_with_table_name ||= "#{caller_class.quoted_table_name}.#{quoted_position_column}"
       end
     end
+  end
+
+  def self.user_uses_rails_3_mass_assignment?
+    defined?(accessible_attributes) and !accessible_attributes.blank?
   end
 end
