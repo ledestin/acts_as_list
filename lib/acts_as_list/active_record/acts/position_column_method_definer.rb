@@ -28,6 +28,8 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
     end
   end
 
+  private
+
   def self.user_uses_rails_3_mass_assignment?
     defined?(accessible_attributes) and !accessible_attributes.blank?
   end
