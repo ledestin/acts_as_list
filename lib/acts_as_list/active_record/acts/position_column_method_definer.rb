@@ -15,7 +15,7 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
       end
 
       if SELF.user_uses_rails_3_mass_assignment?
-        attr_accessible :"#{position_column}"
+        attr_accessible position_column.to_sym
       end
 
       define_singleton_method :quoted_position_column do
