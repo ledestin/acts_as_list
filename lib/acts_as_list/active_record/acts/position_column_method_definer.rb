@@ -14,7 +14,7 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
         @position_changed = true
       end
 
-      SELF.enable_mass_assignment(position_changed) if SELF.user_uses_rails_3_mass_assignment?
+      SELF.enable_mass_assignment(position_changed) if SELF.user_uses_mass_assignment?
 
       define_singleton_method :quoted_position_column do
         @_quoted_position_column ||= connection.quote_column_name(position_column)
@@ -32,7 +32,7 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
     attr_accessible position_column.to_sym
   end
 
-  def self.user_uses_rails_3_mass_assignment?
+  def self.user_uses_mass_assignment?
     defined?(accessible_attributes) and !accessible_attributes.blank?
   end
 end
