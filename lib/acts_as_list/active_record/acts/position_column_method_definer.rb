@@ -7,8 +7,8 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
         position_column
       end
 
-      define_method :"#{position_column}=" do |position|
-        write_attribute(position_column, position)
+      define_method :"#{position_column}=" do |new_position|
+        write_attribute(position_column, new_position)
         @position_changed = true
       end
 
