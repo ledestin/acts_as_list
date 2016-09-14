@@ -33,6 +33,6 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
   end
 
   def self.user_uses_mass_assignment?
-    defined?(accessible_attributes) and !accessible_attributes.blank?
+    defined?(accessible_attributes) and accessible_attributes.present?
   end
 end
