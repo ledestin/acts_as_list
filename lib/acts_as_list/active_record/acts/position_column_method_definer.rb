@@ -21,7 +21,7 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
       end
 
       define_singleton_method :quoted_position_column_with_table_name do
-        @_quoted_position_column_with_table_name ||= "#{caller_class.quoted_table_name}.#{quoted_position_column}"
+        @_quoted_position_column_with_table_name ||= "#{quoted_table_name}.#{quoted_position_column}"
       end
     end
   end
