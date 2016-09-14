@@ -1,4 +1,4 @@
-require_relative "column_method_definer"
+require_relative "position_column_method_definer"
 require_relative "scope_method_definer"
 require_relative "top_of_list_method_definer"
 require_relative "add_new_at_method_definer"
@@ -45,7 +45,7 @@ module ActiveRecord
         def acts_as_list(column: "position", scope: "1 = 1", top_of_list: 1, add_new_at: :bottom)
           caller_class = self
 
-          ColumnMethodDefiner.call(caller_class, column)
+          PositionColumnMethodDefiner.call(caller_class, column)
           ScopeMethodDefiner.call(caller_class, scope)
           TopOfListMethodDefiner.call(caller_class, top_of_list)
           AddNewAtMethodDefiner.call(caller_class, add_new_at)
