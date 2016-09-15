@@ -3,7 +3,12 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
     enable_mass_assignment(caller_class, position_column) if user_uses_mass_assignment?(caller_class)
 
     define_instance_methods(caller_class, position_column)
+    define_class_methods(caller_class, position_column)
+  end
 
+  private
+
+  def self.define_class_methods(caller_class, position_column)
     caller_class.class_eval do
       define_singleton_method :quoted_position_column do
         @_quoted_position_column ||= connection.quote_column_name(position_column)
@@ -14,8 +19,6 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
       end
     end
   end
-
-  private
 
   def self.define_instance_methods(caller_class, position_column)
     caller_class.class_eval do
