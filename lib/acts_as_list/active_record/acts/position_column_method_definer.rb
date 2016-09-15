@@ -1,9 +1,9 @@
 module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
   def self.call(caller_class, position_column)
-    enable_mass_assignment(caller_class, position_column) if user_uses_mass_assignment?(caller_class)
-
     define_instance_methods(caller_class, position_column)
     define_class_methods(caller_class, position_column)
+
+    enable_mass_assignment(caller_class, position_column) if user_uses_mass_assignment?(caller_class)
   end
 
   private
