@@ -23,6 +23,7 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
   def self.define_instance_methods(caller_class, position_column)
     caller_class.class_eval do
       attr_reader :position_changed
+      alias_method :position_changed?, :position_changed
 
       define_method :position_column do
         position_column
