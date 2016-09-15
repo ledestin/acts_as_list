@@ -1,7 +1,7 @@
 module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
-  SELF = self
-
   def self.call(caller_class, position_column)
+    enable_mass_assignment(caller_class, position_column) if user_uses_mass_assignment?(caller_class)
+
     caller_class.class_eval do
       attr_reader :position_changed
 
@@ -13,8 +13,6 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
         write_attribute(position_column, new_position)
         @position_changed = true
       end
-
-      SELF.enable_mass_assignment(position_column) if SELF.user_uses_mass_assignment?
 
       define_singleton_method :quoted_position_column do
         @_quoted_position_column ||= connection.quote_column_name(position_column)
@@ -28,11 +26,15 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
 
   private
 
-  def self.enable_mass_assignment(position_column)
-    attr_accessible position_column.to_sym
+  def self.enable_mass_assignment(caller_class, position_column)
+    caller_class.class_eval do
+      attr_accessible position_column.to_sym
+    end
   end
 
-  def self.user_uses_mass_assignment?
-    defined?(accessible_attributes) and accessible_attributes.present?
+  def self.user_uses_mass_assignment?(caller_class)
+    caller_class.class_eval do
+      defined?(accessible_attributes) and accessible_attributes.present?
+    end
   end
 end
