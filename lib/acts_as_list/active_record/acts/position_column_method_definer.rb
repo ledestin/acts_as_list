@@ -22,6 +22,8 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
 
   def self.define_instance_methods(caller_class, position_column)
     caller_class.class_eval do
+      # Stock Rails #position_changed? can't be used because we consider position changed if there was an assignemnt,
+      # regardless of whether the value has changed.
       attr_reader :position_changed
 
       define_method :position_column do
