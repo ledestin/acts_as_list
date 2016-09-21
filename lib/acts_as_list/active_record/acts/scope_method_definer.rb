@@ -42,7 +42,7 @@ module ActiveRecord::Acts::List::ScopeMethodDefiner #:nodoc:
   end
 
   def self.idify(name)
-    return name if name.to_s =~ /_id$/
+    return name.to_sym if name.to_s =~ /_id$/
 
     foreign_key(name).to_sym
   end
