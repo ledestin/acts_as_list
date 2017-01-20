@@ -1,25 +1,23 @@
 module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
   def self.call(caller_class, position_column)
-    @caller_class = caller_class
+    define_class_methods(caller_class, position_column)
+    define_instance_methods(caller_class, position_column)
 
-    define_class_methods(position_column)
-    define_instance_methods(position_column)
-
-    if mass_assignment_protection_was_used_by_user?
-      protect_attributes_from_mass_assignment(position_column)
+    if mass_assignment_protection_was_used_by_user?(caller_class)
+      protect_attributes_from_mass_assignment(caller_class, position_column)
     end
   end
 
   private
 
-  def self.define_class_methods(position_column)
-    @caller_class.class_eval do
+  def self.define_class_methods(caller_class, position_column)
+    caller_class.class_eval do
       define_singleton_method :quoted_position_column do
         @_quoted_position_column ||= connection.quote_column_name(position_column)
       end
 
       define_singleton_method :quoted_position_column_with_table_name do
-        @_quoted_position_column_with_table_name ||= "#{self.quoted_table_name}.#{quoted_position_column}"
+        @_quoted_position_column_with_table_name ||= "#{caller_class.quoted_table_name}.#{quoted_position_column}"
       end
 
       define_singleton_method :decrement_all do
@@ -44,8 +42,8 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
     end
   end
 
-  def self.define_instance_methods(position_column)
-    @caller_class.class_eval do
+  def self.define_instance_methods(caller_class, position_column)
+    caller_class.class_eval do
       attr_reader :position_changed
 
       define_method :position_column do
@@ -59,14 +57,14 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
     end
   end
 
-  def self.mass_assignment_protection_was_used_by_user?
-    @caller_class.class_eval do
+  def self.mass_assignment_protection_was_used_by_user?(caller_class)
+    caller_class.class_eval do
       respond_to?(:accessible_attributes) and accessible_attributes.present?
     end
   end
 
-  def self.protect_attributes_from_mass_assignment(position_column)
-    @caller_class.class_eval do
+  def self.protect_attributes_from_mass_assignment(caller_class, position_column)
+    caller_class.class_eval do
       attr_accessible position_column.to_sym
     end
   end
