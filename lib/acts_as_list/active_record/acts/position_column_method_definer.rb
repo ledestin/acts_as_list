@@ -1,6 +1,6 @@
 module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
   def self.call(caller_class, position_column)
-    @caller_class = caller_class
+    self.caller_class = caller_class
 
     define_class_methods(position_column)
     define_instance_methods(position_column)
@@ -12,8 +12,16 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
 
   private
 
+  def self.caller_class=(value)
+    Thread.current.thread_variable_set :acts_as_list_caller_class, value
+  end
+
+  def self.caller_class
+    Thread.current.thread_variable_get :acts_as_list_caller_class
+  end
+
   def self.define_class_methods(position_column)
-    @caller_class.class_eval do
+    caller_class.class_eval do
       define_singleton_method :quoted_position_column do
         @_quoted_position_column ||= connection.quote_column_name(position_column)
       end
@@ -45,7 +53,7 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
   end
 
   def self.define_instance_methods(position_column)
-    @caller_class.class_eval do
+    caller_class.class_eval do
       attr_reader :position_changed
 
       define_method :position_column do
@@ -60,13 +68,13 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
   end
 
   def self.mass_assignment_protection_was_used_by_user?
-    @caller_class.class_eval do
+    caller_class.class_eval do
       respond_to?(:accessible_attributes) and accessible_attributes.present?
     end
   end
 
   def self.protect_attributes_from_mass_assignment(position_column)
-    @caller_class.class_eval do
+    caller_class.class_eval do
       attr_accessible position_column.to_sym
     end
   end
