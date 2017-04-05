@@ -20,10 +20,6 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
         update_all_with_touch "#{quoted_position_column} = (#{quoted_position_column_with_table_name} + 1)"
       end
 
-      define_singleton_method :update_all_with_touch do |updates|
-        update_all(updates << touch_columns_update_sql)
-      end
-
       private
 
       define_singleton_method :quoted_position_column do
@@ -32,6 +28,10 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
 
       define_singleton_method :quoted_position_column_with_table_name do
         @_quoted_position_column_with_table_name ||= "#{caller_class.quoted_table_name}.#{quoted_position_column}"
+      end
+
+      define_singleton_method :update_all_with_touch do |updates|
+        update_all(updates << touch_columns_update_sql)
       end
 
       define_singleton_method :touch_columns_update_sql do
