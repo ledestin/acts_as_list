@@ -16,7 +16,7 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
         update_all_with_touch "#{quoted_position_column} = (#{quoted_position_column_with_table_name} - 1)"
       end
 
-      define_singleton_method :increment_all do
+      define_singleton_method :increment_all_positions do
         update_all_with_touch "#{quoted_position_column} = (#{quoted_position_column_with_table_name} + 1)"
       end
 

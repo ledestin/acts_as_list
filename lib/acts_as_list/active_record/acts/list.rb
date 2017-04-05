@@ -290,7 +290,7 @@ module ActiveRecord
         # This has the effect of moving all the higher items down one.
         def increment_positions_on_higher_items
           return unless in_list?
-          acts_as_list_list.where("#{quoted_position_column_with_table_name} < ?", send(position_column).to_i).increment_all
+          acts_as_list_list.where("#{quoted_position_column_with_table_name} < ?", send(position_column).to_i).increment_all_positions
         end
 
         # This has the effect of moving all the lower items down one.
@@ -301,7 +301,7 @@ module ActiveRecord
             scope = scope.where("#{quoted_table_name}.#{self.class.primary_key} != ?", avoid_id)
           end
 
-          scope.where("#{quoted_position_column_with_table_name} >= ?", position).increment_all
+          scope.where("#{quoted_position_column_with_table_name} >= ?", position).increment_all_positions
         end
 
         # This has the effect of moving all the higher items up one.
@@ -318,11 +318,11 @@ module ActiveRecord
 
         # Increments position (<tt>position_column</tt>) of all items in the list.
         def increment_positions_on_all_items
-          acts_as_list_list.increment_all
+          acts_as_list_list.increment_all_positions
         end
 
         # Reorders intermediate items to support moving an item from old_position to new_position.
-        # unique constraint prevents regular increment_all and forces to do increments one by one
+        # unique constraint prevents regular increment_all_positions and forces to do increments one by one
         # http://stackoverflow.com/questions/7703196/sqlite-increment-unique-integer-field
         # both SQLite and PostgreSQL (and most probably MySQL too) has same issue
         # that's why *sequential_updates?* check alters implementation behavior
@@ -368,7 +368,7 @@ module ActiveRecord
                 item.increment!(position_column)
               end
             else
-              items.increment_all
+              items.increment_all_positions
             end
           end
         end
