@@ -12,10 +12,6 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
 
   def self.define_class_methods(caller_class, position_column)
     caller_class.class_eval do
-      define_singleton_method :quoted_position_column_with_table_name do
-        @_quoted_position_column_with_table_name ||= "#{caller_class.quoted_table_name}.#{quoted_position_column}"
-      end
-
       define_singleton_method :decrement_all do
         update_all_with_touch "#{quoted_position_column} = (#{quoted_position_column_with_table_name} - 1)"
       end
@@ -32,6 +28,10 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
 
       define_singleton_method :quoted_position_column do
         @_quoted_position_column ||= connection.quote_column_name(position_column)
+      end
+
+      define_singleton_method :quoted_position_column_with_table_name do
+        @_quoted_position_column_with_table_name ||= "#{caller_class.quoted_table_name}.#{quoted_position_column}"
       end
 
       define_singleton_method :touch_columns_update_sql do
