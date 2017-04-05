@@ -12,7 +12,7 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
 
   def self.define_class_methods(caller_class, position_column)
     caller_class.class_eval do
-      define_singleton_method :decrement_all do
+      define_singleton_method :decrement_all_positions do
         update_all_with_touch "#{quoted_position_column} = (#{quoted_position_column_with_table_name} - 1)"
       end
 

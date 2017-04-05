@@ -306,14 +306,14 @@ module ActiveRecord
 
         # This has the effect of moving all the higher items up one.
         def decrement_positions_on_higher_items(position)
-          acts_as_list_list.where("#{quoted_position_column_with_table_name} <= ?", position).decrement_all
+          acts_as_list_list.where("#{quoted_position_column_with_table_name} <= ?", position).decrement_all_positions
         end
 
         # This has the effect of moving all the lower items up one.
         def decrement_positions_on_lower_items(position=nil)
           return unless in_list?
           position ||= send(position_column).to_i
-          acts_as_list_list.where("#{quoted_position_column_with_table_name} > ?", position).decrement_all
+          acts_as_list_list.where("#{quoted_position_column_with_table_name} > ?", position).decrement_all_positions
         end
 
         # Increments position (<tt>position_column</tt>) of all items in the list.
@@ -350,7 +350,7 @@ module ActiveRecord
                 item.decrement!(position_column)
               end
             else
-              items.decrement_all
+              items.decrement_all_positions
             end
           else
             # Increment position of intermediate items
