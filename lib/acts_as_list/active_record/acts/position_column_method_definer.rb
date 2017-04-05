@@ -35,13 +35,7 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
       private
 
       define_singleton_method :touch_columns_update_sql do
-        record = new
-        attrs = record.send(:timestamp_attributes_for_update_in_model)
-        now = record.send(:current_time_from_proper_timezone)
-
-        attrs.inject("") do |result, attr|
-          result << ", #{connection.quote_column_name(attr)} = #{connection.quote(connection.quoted_date(now))}"
-        end
+        new.touch_columns_update_sql(connection)
       end
     end
   end
@@ -57,6 +51,14 @@ module ActiveRecord::Acts::List::PositionColumnMethodDefiner #:nodoc:
       define_method :"#{position_column}=" do |position|
         write_attribute(position_column, position)
         @position_changed = true
+      end
+
+      define_method :touch_columns_update_sql do |connection|
+        now = current_time_from_proper_timezone
+
+        timestamp_attributes_for_update_in_model.inject("") do |result, attr|
+          result << ", #{connection.quote_column_name(attr)} = #{connection.quote(connection.quoted_date(now))}"
+        end
       end
     end
   end
